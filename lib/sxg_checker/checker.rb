@@ -10,7 +10,7 @@ module SxgChecker
       return Document.new(url, :missing) unless response
 
       sxg = extract_sxg(response.body)
-      return Document.new(url, :unparseable) unless sxg
+      return Document.new(url, :parsing_error) unless sxg
 
       return Document.new(url, :invalid) unless sxg.fetch('Valid') == true
 
