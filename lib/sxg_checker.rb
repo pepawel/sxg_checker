@@ -13,4 +13,5 @@ else
 end
 
 module SxgChecker
+  InvalidUrl = Class.new(StandardError)
 end

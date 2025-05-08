@@ -1,13 +1,13 @@
 module SxgChecker
   class Formatter
-    def call(resource)
+    def resource(resource)
       icon = icons.fetch(resource.status)
       "#{icon} #{resource.url}"
     end
 
-    private
-
     attr_reader :icons
+
+    private
 
     def initialize(icons = {
           ok: '✓',

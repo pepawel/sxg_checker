@@ -2,19 +2,6 @@
 
 require "sxg_checker"
 
-checker = SxgChecker::Checker.new
-
-url = ARGV[0]
-
-unless url
-  puts "Usage:"
-  puts "  sxg_checker <URL>"
-  exit 1
-end
-
-document = checker.call(url)
-resources = [document] + document.subresources
-formatter = SxgChecker::Formatter.new
-resources.each do |resource|
-  puts formatter.call(resource)
-end
+exe_name = File.basename($0)
+cli = SxgChecker::Cli.new(exe_name)
+cli.call(ARGV[0])
