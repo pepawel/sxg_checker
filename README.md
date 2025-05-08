@@ -1,43 +1,91 @@
-# SxgChecker
+# SXG Checker
 
-TODO: Delete this and the text below, and describe your gem
+[![Gem Version](https://badge.fury.io/rb/sxg_checker.svg)](https://badge.fury.io/rb/sxg_checker)
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/sxg_checker`. To experiment with that code, run `bin/console` for an interactive prompt.
+A command-line tool for checking the Google SXG cache for the presence of a document and its subresources.
+
+It verifies if your web page and its resources are properly available in Google's Signed Exchanges (SXG) cache,
+helping you troubleshoot SXG implementation issues with detailed status reporting for each resource.
+
+## Status indicators
+
+| Symbol | Meaning | Description |
+|--------|---------|-------------|
+| ✓ | ok | Resource exists and is valid |
+| ? | missing | Resource not found in SXG cache |
+| x | invalid | Resource exists but its signature is invalid |
+| ! | parsing error | Unable to parse the SXG resource |
+| ~ | links mismatch | The subresources specified in SXG doesn't match subresources to be prefetched from SXG cache |
+| ≠ | integrity mismatch | Subresource integrity hash mismatch |
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
+Make sure to install [dump-signedexchange](https://github.com/WICG/webpackage/blob/main/go/signedexchange/README.md).
+Then install the gem by executing:
 
-Install the gem and add to the application's Gemfile by executing:
-
-```bash
-bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
 ```
-
-If bundler is not being used to manage dependencies, install the gem by executing:
-
-```bash
-gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+$ gem install sxg_checker
 ```
 
 ## Usage
 
-TODO: Write usage instructions here
+### Command line
+
+To check a URL in Google's SXG cache:
+
+```
+$ sxg-checker https://www.yourwebsite.com/your-page
+```
+
+If you installed `dump-signedexchange` binary somewhere else than `~/go/bin/dump-signedexchange`, specify the
+path in `DUMP_SIGNEDEXCHANGE_PATH` environment variable:
+
+```
+$ DUMP_SIGNEDEXCHANGE_PATH=/usr/local/bin/dump-signedexchange sxg-checker https://www.yourwebsite.com/your-page
+```
+
+### In Ruby applications
+
+You can also use SXG Checker as a library in your Ruby applications:
+
+```ruby
+require 'sxg_checker'
+
+checker = SxgChecker::Checker.new(tool: /usr/local/bin/dump-signedexchange) # The `tool` parameter is optional
+result = checker.call(url)
+
+# Access the results
+puts result.url    # The URL of the cached document
+puts result.status # The status symbol (:ok, :missing, etc.)
+
+# Iterate through subresources
+result.subresources.each do |subresource|
+  puts "#{subresource.url}: #{subresource.status}"
+end
+```
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+After checking out the repo, run `bundle install` to install dependencies. Then, run `bundle exec rake spec` to run the tests.
+You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+To build the gem, run `bundle exec rake build`. To release a new version, update the version number in `version.rb`,
+and then run `bundle rake release`, which will create a git tag for the version, push git commits and the created tag,
+and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/sxg_checker. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/sxg_checker/blob/main/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at [https://github.com/pepawel/sxg_checker].
+This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere
+to the code of conduct.
+
+## Author
+
+My name is Paweł Pokrywka and I'm the author of SXG Checker.
+
+If you want to contact me or get to know me better, check out
+[my blog](https://www.pawelpokrywka.com).
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
-## Code of Conduct
-
-Everyone interacting in the SxgChecker project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/sxg_checker/blob/main/CODE_OF_CONDUCT.md).
+The software is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
