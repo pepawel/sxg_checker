@@ -5,6 +5,8 @@ require 'parallel'
 module SxgChecker
   class Checker
     def call(document_url)
+      raise ToolNotFound.new("executable not found: #{tool}") unless File.executable?(tool)
+
       url = cacheify_document_url(document_url)
       response = fetch_sxg(url)
       return Document.new(url, :missing) unless response
@@ -30,6 +32,8 @@ module SxgChecker
 
       Document.new(url, :ok, subresources)
     end
+
+    attr_reader :default_tool
 
     private
 
@@ -88,19 +92,21 @@ module SxgChecker
 
     def cacheify_document_url(url)
       uri = URI.parse(url)
-      raise InvalidUrl unless uri.scheme == 'https' && uri.host && uri.fragment.nil?
+      raise InvalidUrl.new("invalid URL") unless uri.scheme == 'https' && uri.host && uri.fragment.nil?
 
       host = uri.host.to_s.gsub('.', '-')
       "https://#{host}.webpkgcache.com/doc/-/s/#{url.sub('https://', '')}"
     rescue URI::InvalidURIError
-      raise InvalidUrl
+      raise InvalidUrl.new("can't parse URL")
     end
 
     attr_reader :tool, :mapper
 
     def initialize(mapper: Parallel.method(:map),
-                   tool: "#{ENV['HOME']}/go/bin/dump-signedexchange")
+                   default_tool: "#{ENV['HOME']}/go/bin/dump-signedexchange",
+                   tool: ENV['DUMP_SIGNEDEXCHANGE_PATH'] || default_tool)
       @mapper = mapper
+      @default_tool = default_tool
       @tool = tool
     end
   end

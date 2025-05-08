@@ -13,5 +13,7 @@ else
 end
 
 module SxgChecker
-  InvalidUrl = Class.new(StandardError)
+  Error = Class.new(StandardError)
+  InvalidUrl = Class.new(Error)
+  ToolNotFound = Class.new(Error)
 end

@@ -12,8 +12,8 @@ module SxgChecker
     def initialize(icons = {
           ok: '✓',
           missing: '?',
-          parsing_error: '!',
           invalid: 'x',
+          parsing_error: '!',
           links_mismatch: '~',
           integrity_mismatch: '≠'
         })

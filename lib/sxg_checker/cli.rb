@@ -8,8 +8,8 @@ module SxgChecker
       resources.each do |resource|
         puts formatter.resource(resource)
       end
-    rescue InvalidUrl
-      puts "#{exe_name}: error: invalid URL"
+    rescue Error => e
+      puts "#{exe_name}: error: #{e.message}"
       exit 1
     end
 
@@ -25,6 +25,9 @@ module SxgChecker
       puts "Example:"
       puts "  #{exe_name} https://www.yourwebsite.com/your-page"
       puts
+      puts "Environment variables:"
+      puts "  DUMP_SIGNEDEXCHANGE_PATH - path to dump-signedexchange binary (default: #{checker.default_tool})"
+      puts
       show_statuses
     end
 
@@ -35,12 +38,12 @@ module SxgChecker
       end
     end
 
-    attr_reader :exe_name, :checker, :formatter
+    attr_reader :exe_name, :formatter, :checker
 
     def initialize(exe_name)
       @exe_name = exe_name
-      @checker = SxgChecker::Checker.new
       @formatter = SxgChecker::Formatter.new
+      @checker = SxgChecker::Checker.new
     end
   end
 end
