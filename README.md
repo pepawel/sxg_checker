@@ -9,22 +9,39 @@ helping you troubleshoot SXG implementation issues with detailed status reportin
 
 ## Status indicators
 
-| Symbol | Meaning | Description |
+| Symbol | Status | Description |
 |--------|---------|-------------|
 | ✓ | ok | Resource exists and is valid |
 | ? | missing | Resource not found in SXG cache |
 | x | invalid | Resource exists but its signature is invalid |
-| ! | parsing error | Unable to parse the SXG resource |
-| ~ | links mismatch | The subresources specified in SXG doesn't match subresources to be prefetched from SXG cache |
-| ≠ | integrity mismatch | Subresource integrity hash mismatch |
+| ! | parsing_error | Unable to parse the SXG resource |
+| ~ | links_mismatch | The subresources specified in SXG doesn't match subresources to be prefetched from SXG cache |
+| ≠ | integrity_mismatch | Subresource integrity hash mismatch |
 
 ## Installation
 
 Make sure to install [dump-signedexchange](https://github.com/WICG/webpackage/blob/main/go/signedexchange/README.md).
-Then install the gem by executing:
 
+If you intent to use it as a library for your app, add to your `Gemfile`:
 ```
-$ gem install sxg_checker
+gem "sxg_checker"
+```
+
+To make the command line tool available to all users in the system, run:
+```shell
+sudo gem install sxg_checker
+```
+
+If you prefer to make it available to yourself only, execute:
+```shell
+gem install --user-install sxg_checker
+```
+
+In case of user install, make sure to add a directory containing the executable to your PATH.
+You can find the executable location by running:
+
+```shell
+gem contents sxg_checker|grep sxg-checker
 ```
 
 ## Usage
@@ -33,15 +50,15 @@ $ gem install sxg_checker
 
 To check a URL in Google's SXG cache:
 
-```
-$ sxg-checker https://www.yourwebsite.com/your-page
+```shell
+sxg-checker https://www.yourwebsite.com/your-page
 ```
 
 If you installed `dump-signedexchange` binary somewhere else than `~/go/bin/dump-signedexchange`, specify the
 path in `DUMP_SIGNEDEXCHANGE_PATH` environment variable:
 
-```
-$ DUMP_SIGNEDEXCHANGE_PATH=/usr/local/bin/dump-signedexchange sxg-checker https://www.yourwebsite.com/your-page
+```shell
+DUMP_SIGNEDEXCHANGE_PATH=/usr/local/bin/dump-signedexchange sxg-checker https://www.yourwebsite.com/your-page
 ```
 
 ### In Ruby applications
