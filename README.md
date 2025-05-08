@@ -15,19 +15,19 @@ helping you troubleshoot SXG implementation issues with detailed status reportin
 | ? | missing | Resource not found in SXG cache |
 | x | invalid | Resource exists but its signature is invalid |
 | ! | parsing_error | Unable to parse the SXG resource |
-| ~ | links_mismatch | The subresources specified in SXG doesn't match subresources to be prefetched from SXG cache |
+| ~ | links_mismatch | The subresources specified in SXG don't match subresources to be prefetched from SXG cache |
 | ≠ | integrity_mismatch | Subresource integrity hash mismatch |
 
 ## Installation
 
 Make sure to install [dump-signedexchange](https://github.com/WICG/webpackage/blob/main/go/signedexchange/README.md).
 
-If you intent to use it as a library for your app, add to your `Gemfile`:
-```
+If you intend to use it as a library for your app, add to your `Gemfile`:
+```ruby
 gem "sxg_checker"
 ```
 
-Otherwise, to make the command line tool available to all users in the system, run:
+Otherwise, to make the command-line tool available to all users in the system, run:
 ```shell
 sudo gem install sxg_checker
 ```
@@ -37,11 +37,11 @@ If you prefer to make it available to yourself only, execute instead:
 gem install --user-install sxg_checker
 ```
 
-In case of user install, make sure to add a directory containing the executable to your `$PATH`.
+In case of user-specific installation, make sure to add the directory containing the executable to your `$PATH`.
 You can find the executable location by running:
 
 ```shell
-gem contents sxg_checker|grep sxg-checker
+gem contents sxg_checker | grep sxg-checker
 ```
 
 ## Usage
@@ -54,8 +54,8 @@ To check a URL in Google's SXG cache:
 sxg-checker https://www.yourwebsite.com/your-page
 ```
 
-If you installed `dump-signedexchange` binary somewhere else than `~/go/bin/dump-signedexchange`, specify the
-path in `DSXG_PATH` environment variable:
+If you installed the `dump-signedexchange` binary somewhere other than `~/go/bin/dump-signedexchange`, specify the
+path in the `DSXG_PATH` environment variable:
 
 ```shell
 DSXG_PATH=/usr/local/bin/dump-signedexchange sxg-checker https://www.yourwebsite.com/your-page
@@ -68,7 +68,7 @@ You can also use SXG Checker as a library in your Ruby applications:
 ```ruby
 require 'sxg_checker'
 
-checker = SxgChecker::Checker.new(tool: /usr/local/bin/dump-signedexchange) # The `tool` parameter is optional
+checker = SxgChecker::Checker.new(tool: '/usr/local/bin/dump-signedexchange') # The `tool` parameter is optional
 result = checker.call(url)
 
 # Access the results
@@ -87,7 +87,7 @@ After checking out the repo, run `bundle install` to install dependencies. Then,
 You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
 To build the gem, run `bundle exec rake build`. To release a new version, update the version number in `version.rb`,
-and then run `bundle rake release`, which will create a git tag for the version, push git commits and the created tag,
+and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag,
 and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## Contributing
