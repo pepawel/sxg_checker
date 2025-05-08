@@ -99,8 +99,7 @@ module SxgChecker
       uri = URI.parse(url)
       raise InvalidUrl.new("invalid URL") unless uri.scheme == "https" && uri.host && uri.fragment.nil?
 
-      host = uri.host.to_s.tr(".", "-")
-      "https://#{host}.webpkgcache.com/doc/-/s/#{url.sub("https://", "")}"
+      "https://#{uri.host.tr(".", "-")}.webpkgcache.com/doc/-/s/#{uri.host}#{uri.request_uri}"
     rescue URI::InvalidURIError
       raise InvalidUrl.new("can't parse URL")
     end
