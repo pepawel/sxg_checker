@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require 'sxg_checker/version'
+require "sxg_checker/version"
 
 if defined? SxgChecker::AUTOLOADERS
-  require 'zeitwerk'
+  require "zeitwerk"
   SxgChecker::AUTOLOADERS << Zeitwerk::Loader.for_gem.tap do |loader|
     loader.ignore("#{__dir__}/basic_loader.rb")
     loader.setup
   end
 else
-  require 'basic_loader'
+  require "basic_loader"
 end
 
 module SxgChecker

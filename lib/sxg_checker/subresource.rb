@@ -5,11 +5,11 @@ module SxgChecker
     attr_reader :url, :status
 
     def fresh_url
-      @fresh_url ||= url.sub(/^.+\/s\//, 'https://')
+      @fresh_url ||= url.sub(/^.+\/s\//, "https://")
     end
 
-    def <=>(o)
-      fresh_url <=> o.fresh_url
+    def <=>(other)
+      fresh_url <=> other.fresh_url
     end
 
     private

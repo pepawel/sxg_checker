@@ -10,13 +10,13 @@ module SxgChecker
     private
 
     def initialize(icons = {
-          ok: '✓',
-          missing: '?',
-          invalid: 'x',
-          parsing_error: '!',
-          links_mismatch: '~',
-          integrity_mismatch: '≠'
-        })
+      ok: "✓",
+      missing: "?",
+      invalid: "x",
+      parsing_error: "!",
+      links_mismatch: "~",
+      integrity_mismatch: "≠"
+    })
       @icons = icons
     end
   end

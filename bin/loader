@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'pathname'
-require 'stringio'
+require "pathname"
+require "stringio"
 
 class LoaderGenerator
   def call
@@ -15,9 +15,9 @@ class LoaderGenerator
       HEADER
       yield.each do |auto_loader|
         auto_loader.on_load do |_cpath, _value, abspath|
-          next if abspath !~ /.rb$/i # skip directories
+          next if !/.rb$/i.match?(abspath) # skip directories
 
-          out.puts "require '#{path_to_requirement(abspath)}'"
+          out.puts "require \"#{path_to_requirement(abspath)}\""
         end
         auto_loader.eager_load
       end
@@ -28,11 +28,11 @@ class LoaderGenerator
   private
 
   def writer(&block)
-    output ? block.call(output) : File.open(loader_path, 'w', &block)
+    output ? block.call(output) : File.open(loader_path, "w", &block)
   end
 
   def path_to_requirement(abspath)
-    relative_path_from(loader_dir, abspath).sub(/.rb$/i, '')
+    relative_path_from(loader_dir, abspath).sub(/.rb$/i, "")
   end
 
   def relative_path_from(base_dir, target_path)
@@ -71,14 +71,14 @@ class LoaderValidator
   end
 end
 
-require 'bundler/setup'
+require "bundler/setup"
 
-loader_path = File.join(__dir__, '..', 'lib', 'basic_loader.rb')
+loader_path = File.join(__dir__, "..", "lib", "basic_loader.rb")
 
-klass = ARGV[0] == 'generate' ? LoaderGenerator : LoaderValidator
+klass = (ARGV[0] == "generate") ? LoaderGenerator : LoaderValidator
 action = klass.new(loader_path)
 result = action.call do
-  require 'sxg_checker'
+  require "sxg_checker"
   SxgChecker::AUTOLOADERS
 end
 exit 1 unless result

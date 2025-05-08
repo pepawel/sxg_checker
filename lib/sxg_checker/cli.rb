@@ -1,7 +1,7 @@
 module SxgChecker
   class Cli
     def call(url)
-      return show_usage if url.nil? || url == '-h' || url == '--help'
+      return show_usage if url.nil? || url == "-h" || url == "--help"
 
       document = checker.call(url)
       resources = [document] + document.subresources.sort
@@ -34,7 +34,7 @@ module SxgChecker
     def show_statuses
       puts "Possible statuses:"
       formatter.icons.map do |status, icon|
-        puts "  #{icon} #{status.to_s.gsub('_', ' ')}"
+        puts "  #{icon} #{status.to_s.tr("_", " ")}"
       end
     end
 

@@ -1,6 +1,6 @@
-require 'uri'
-require 'http'
-require 'parallel'
+require "uri"
+require "http"
+require "parallel"
 
 module SxgChecker
   class Checker
@@ -14,10 +14,10 @@ module SxgChecker
       sxg = extract_sxg(response.body)
       return Document.new(url, :parsing_error) unless sxg
 
-      return Document.new(url, :invalid) unless sxg.fetch('Valid') == true
+      return Document.new(url, :invalid) unless sxg.fetch("Valid") == true
 
-      fresh_cached = extract_links(response.headers['Link'])
-      fresh_integrity = extract_integrity(sxg.fetch('ResponseHeaders').fetch('Link', [""]))
+      fresh_cached = extract_links(response.headers["Link"])
+      fresh_integrity = extract_integrity(sxg.fetch("ResponseHeaders").fetch("Link", [""]))
       return Document.new(url, :links_mismatch) if fresh_cached.keys.sort != fresh_integrity.keys.sort
 
       cached_integrity = fresh_integrity.map do |fresh, integrity|
@@ -44,39 +44,44 @@ module SxgChecker
       sxg = extract_sxg(response.body)
       return :parsing_error unless sxg
 
-      actual_integrity = sxg.fetch('HeaderIntegrity')
+      actual_integrity = sxg.fetch("HeaderIntegrity")
       return :integrity_mismatch unless actual_integrity == expected_integrity
 
-      return :invalid unless sxg.fetch('Valid') == true
+      return :invalid unless sxg.fetch("Valid") == true
 
       :ok
     end
 
     def fetch_sxg(url)
       response = HTTP.headers(accept: "application/signed-exchange;v=b3").get(url)
-      return nil unless response.content_type.mime_type == 'application/signed-exchange'
+      return nil unless response.content_type.mime_type == "application/signed-exchange"
 
       response
     end
 
     def extract_links(link_header)
-      link_header.to_s.split(',').
-        select { _1 =~ /application\/signed-exchange;v=b3/ }.
-        map { _1 =~ /^<(.+)>.+anchor="(.+)"/; [$2, $1] }.
-        to_h
+      link_header.to_s.split(",")
+        .select { _1 =~ /application\/signed-exchange;v=b3/ }
+        .map do
+          _1 =~ /^<(.+)>.+anchor="(.+)"/
+          [$2, $1]
+        end.to_h
     end
 
     def extract_integrity(link_headers)
-      link_headers.
-        map { _1.to_s.split(',') }.
-        flatten.
-        select { _1 =~ /rel=allowed-alt-sxg/ }.
-        map { _1 =~ /^<(.+)>.+header-integrity="(.+)"/; [$1, $2] }.
-        to_h
+      link_headers
+        .map { _1.to_s.split(",") }
+        .flatten
+        .select { _1 =~ /rel=allowed-alt-sxg/ }
+        .map do
+          _1 =~ /^<(.+)>.+header-integrity="(.+)"/
+          [$1, $2]
+        end
+        .to_h
     end
 
     def extract_sxg(body)
-      Tempfile.open('sxg', :encoding => 'ascii-8bit') do |file|
+      Tempfile.open("sxg", encoding: "ascii-8bit") do |file|
         file.write body
         file.flush
         parse_sxg_file file.path
@@ -92,10 +97,10 @@ module SxgChecker
 
     def cacheify_document_url(url)
       uri = URI.parse(url)
-      raise InvalidUrl.new("invalid URL") unless uri.scheme == 'https' && uri.host && uri.fragment.nil?
+      raise InvalidUrl.new("invalid URL") unless uri.scheme == "https" && uri.host && uri.fragment.nil?
 
-      host = uri.host.to_s.gsub('.', '-')
-      "https://#{host}.webpkgcache.com/doc/-/s/#{url.sub('https://', '')}"
+      host = uri.host.to_s.tr(".", "-")
+      "https://#{host}.webpkgcache.com/doc/-/s/#{url.sub("https://", "")}"
     rescue URI::InvalidURIError
       raise InvalidUrl.new("can't parse URL")
     end
@@ -103,8 +108,8 @@ module SxgChecker
     attr_reader :tool, :mapper
 
     def initialize(mapper: Parallel.method(:map),
-                   default_tool: "#{ENV['HOME']}/go/bin/dump-signedexchange",
-                   tool: ENV['DSXG_PATH'] || default_tool)
+      default_tool: "#{ENV["HOME"]}/go/bin/dump-signedexchange",
+      tool: ENV["DSXG_PATH"] || default_tool)
       @mapper = mapper
       @default_tool = default_tool
       @tool = tool

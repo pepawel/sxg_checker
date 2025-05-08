@@ -28,6 +28,6 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency 'http', '~> 5.2'
-  spec.add_dependency 'parallel', "~> 1.27"
+  spec.add_dependency "http", "~> 5.2"
+  spec.add_dependency "parallel", "~> 1.27"
 end
