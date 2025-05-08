@@ -26,7 +26,7 @@ module SxgChecker
       puts "  #{exe_name} https://www.yourwebsite.com/your-page"
       puts
       puts "Environment variables:"
-      puts "  DUMP_SIGNEDEXCHANGE_PATH - path to dump-signedexchange binary (default: #{checker.default_tool})"
+      puts "  DSXG_PATH - path to dump-signedexchange binary (default: #{checker.default_tool})"
       puts
       show_statuses
     end

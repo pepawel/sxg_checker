@@ -104,7 +104,7 @@ module SxgChecker
 
     def initialize(mapper: Parallel.method(:map),
                    default_tool: "#{ENV['HOME']}/go/bin/dump-signedexchange",
-                   tool: ENV['DUMP_SIGNEDEXCHANGE_PATH'] || default_tool)
+                   tool: ENV['DSXG_PATH'] || default_tool)
       @mapper = mapper
       @default_tool = default_tool
       @tool = tool
