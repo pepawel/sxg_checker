@@ -4,4 +4,5 @@ require "sxg_checker"
 
 exe_name = File.basename($0)
 cli = SxgChecker::Cli.new(exe_name)
-cli.call(ARGV[0])
+code = cli.call(ARGV)
+exit code
