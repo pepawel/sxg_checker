@@ -16,4 +16,6 @@ module SxgChecker
   Error = Class.new(StandardError)
   InvalidUrl = Class.new(Error)
   ToolNotFound = Class.new(Error)
+
+  DUMP_BINARY = "#{ENV["HOME"]}/go/bin/dump-signedexchange"
 end

@@ -118,9 +118,7 @@ module SxgChecker
 
     attr_reader :tool, :mapper
 
-    def initialize(mapper: Parallel.method(:map),
-      default_tool: "#{ENV["HOME"]}/go/bin/dump-signedexchange",
-      tool: ENV["DSXG_PATH"] || default_tool)
+    def initialize(mapper: Parallel.method(:map), tool: DUMP_BINARY)
       @mapper = mapper
       @default_tool = default_tool
       @tool = tool
