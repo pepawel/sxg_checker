@@ -109,7 +109,7 @@ module SxgChecker
 
     def cacheify_document_url(url)
       uri = URI.parse(url)
-      raise InvalidUrl.new("invalid URL") unless uri.scheme == "https" && uri.host && uri.fragment.nil?
+      raise InvalidUrl.new("invalid URL: #{url}") unless uri.scheme == "https" && uri.host && uri.fragment.nil?
 
       "https://#{uri.host.tr(".", "-")}.webpkgcache.com/doc/-/s/#{uri.host}#{uri.request_uri}"
     rescue URI::InvalidURIError
