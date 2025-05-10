@@ -8,8 +8,8 @@ It verifies if your web page and its resources are properly available in Google'
 helping you troubleshoot SXG implementation issues with detailed status reporting for each resource.
 
 SXG enables websites to optimize Largest Contentful Paint (LCP) by allowing prefetching directly from the Google search results page.
-For a step-by-step guide, see my (SXG tutorial)[https://www.pawelpokrywka.com/p/how-i-took-lcp-down-under-350ms].
-This tool is also referenced in the section on (monitoring and measuring SXG)[https://www.pawelpokrywka.com/p/measuring-signed-exchanges-impact].
+For a step-by-step guide, see my [SXG tutorial](https://www.pawelpokrywka.com/p/how-i-took-lcp-down-under-350ms).
+This tool is also referenced in the section on [monitoring and measuring SXG](https://www.pawelpokrywka.com/p/measuring-signed-exchanges-impact).
 
 ## Status indicators
 
