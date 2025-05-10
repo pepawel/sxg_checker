@@ -5,8 +5,6 @@ require "parallel"
 module SxgChecker
   class Checker
     def call(document_url)
-      raise ToolNotFound.new("executable not found: #{tool}") unless File.executable?(tool)
-
       url = cacheify_document_url(document_url)
       response = fetch_sxg(url)
       return Document.new(url, :missing) unless response
@@ -89,10 +87,16 @@ module SxgChecker
     end
 
     def parse_sxg_file(path)
+      raise ToolNotFound.new("executable not found: #{tool}") unless tool_available?
+
       command = "#{tool} -json -verify -i #{path}"
       result = `#{command} 2> /dev/null`
       return nil if result.empty?
       JSON.parse(result)
+    end
+
+    def tool_available?
+      @tool_available ||= File.executable?(tool)
     end
 
     def cacheify_document_url(url)
