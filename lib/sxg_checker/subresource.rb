@@ -12,6 +12,10 @@ module SxgChecker
       fresh_url <=> other.fresh_url
     end
 
+    def ok?
+      status == :ok
+    end
+
     private
 
     def initialize(url, status)
