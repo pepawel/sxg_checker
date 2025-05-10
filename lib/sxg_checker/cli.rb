@@ -126,7 +126,7 @@ module SxgChecker
       end
     end
 
-    attr_reader :exe_name, :printer, :checker, :default_dump_binary
+    attr_reader :exe_name, :printer, :default_dump_binary
 
     def initialize(exe_name)
       @exe_name = exe_name
