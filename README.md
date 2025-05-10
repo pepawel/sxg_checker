@@ -2,10 +2,14 @@
 
 [![Gem Version](https://badge.fury.io/rb/sxg_checker.svg)](https://badge.fury.io/rb/sxg_checker)
 
-A library and command-line tool for checking the Google SXG cache for the presence of a document and its subresources.
+A library and command-line tool for checking the Google Signed Exchanges (SXG) cache for the presence of a document and its subresources.
 
-It verifies if your web page and its resources are properly available in Google's Signed Exchanges (SXG) cache,
+It verifies if your web page and its resources are properly available in Google's SXG cache,
 helping you troubleshoot SXG implementation issues with detailed status reporting for each resource.
+
+SXG enables websites to optimize Largest Contentful Paint (LCP) by allowing prefetching directly from the Google search results page.
+For a step-by-step guide, see my (SXG tutorial)[https://www.pawelpokrywka.com/p/how-i-took-lcp-down-under-350ms].
+This tool is also referenced in the section on (monitoring and measuring SXG)[https://www.pawelpokrywka.com/p/measuring-signed-exchanges-impact].
 
 ## Status indicators
 
@@ -51,14 +55,13 @@ gem contents sxg_checker | grep sxg-checker
 To check a URL in Google's SXG cache:
 
 ```shell
-sxg-checker https://www.yourwebsite.com/your-page
+sxg-checker validate https://www.yourwebsite.com/your-page
 ```
 
-If you installed the `dump-signedexchange` binary somewhere other than `~/go/bin/dump-signedexchange`, specify the
-path in the `DSXG_PATH` environment variable:
+To get full usage instructions, run:
 
 ```shell
-DSXG_PATH=/usr/local/bin/dump-signedexchange sxg-checker https://www.yourwebsite.com/your-page
+sxg-checker --help
 ```
 
 ### In Ruby applications
@@ -69,16 +72,23 @@ You can also use SXG Checker as a library in your Ruby applications:
 require 'sxg_checker'
 
 checker = SxgChecker::Checker.new(tool: '/usr/local/bin/dump-signedexchange') # The `tool` parameter is optional
-result = checker.call(url)
+document = checker.validate(url)
 
 # Access the results
-puts result.url    # The URL of the cached document
-puts result.status # The status symbol (:ok, :missing, etc.)
+puts document.url    # The URL of the cached document
+puts document.status # The status symbol (:ok, :missing, etc.)
 
 # Iterate through subresources
-result.subresources.each do |subresource|
+document.subresources.each do |subresource|
   puts "#{subresource.url}: #{subresource.status}"
 end
+
+# If you want to skip validating subresources
+result = checker.validate(url, subresources: false)
+
+# If you want to only warm the SXG cache for a given URL
+checker.warm_cache(url)
+
 ```
 
 ## Development
