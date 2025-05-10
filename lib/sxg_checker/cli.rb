@@ -1,4 +1,4 @@
-require 'optparse'
+require "optparse"
 
 module SxgChecker
   class Cli
@@ -62,7 +62,7 @@ module SxgChecker
         urls.each do |url|
           checker.warm_cache(url)
         end
-        return 0
+        0
       when "validate"
         if urls.empty?
           print_error "no URLs provided for validation"
@@ -73,14 +73,14 @@ module SxgChecker
           document = checker.validate(url, subresources: options[:subresources])
           printer.call(document) unless document.ok? && options[:errors_only]
         end
-        return 0
+        0
       else
         print_error "unknown command '#{command}'"
-        return 1
+        1
       end
     rescue Error => e
       print_error e.message
-      return 1
+      1
     end
 
     private
