@@ -4,7 +4,13 @@ require "parallel"
 
 module SxgChecker
   class Checker
-    def call(document_url)
+    def warm_cache(document_url)
+      url = cacheify_document_url(document_url)
+      fetch_sxg(url)
+      nil
+    end
+
+    def validate(document_url, subresources: true)
       url = cacheify_document_url(document_url)
       response = fetch_sxg(url)
       return Document.new(url, :missing) unless response
@@ -17,6 +23,8 @@ module SxgChecker
       fresh_cached = extract_links(response.headers["Link"])
       fresh_integrity = extract_integrity(sxg.fetch("ResponseHeaders").fetch("Link", [""]))
       return Document.new(url, :links_mismatch) if fresh_cached.keys.sort != fresh_integrity.keys.sort
+
+      return Document.new(url, :ok) unless subresources
 
       cached_integrity = fresh_integrity.map do |fresh, integrity|
         cached = fresh_cached.fetch(fresh)
