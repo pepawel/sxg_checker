@@ -63,6 +63,22 @@ To get full usage instructions, run:
 sxg-checker --help
 ```
 
+### Cron
+
+If you want to constantly monitor critical pages of your website, the simplest solution is to use cron.
+
+If something is wrong, the cron job will send you an email with the output of the SXG Checker.
+It requires you to configure your Mail Transport Agent (MTA).
+
+```
+# Warm the Google SXG cache.
+1,3,5,7 4 * * * user sxg-checker warm URL1 URL2
+
+# Validate if it contains valid copies.
+# The -e option causes the tool to generate output only on errors.
+20 4      * * * user sxg-checker validate -e URL1 URL2
+```
+
 ### In Ruby applications
 
 You can also use SXG Checker as a library in your Ruby applications:
